@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>API Interaction Example</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<style>
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 10px;
+  }
+</style>
+</head>
+<body>
+
+<h1>API Data Display</h1>
+<table id="dataTable">
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Data rows will be inserted here -->
+  </tbody>
+</table>
+
+<h2>Send Data</h2>
+<input type="text" id="userInput" style="width: 500px;" placeholder="Enter your query" />
+<button onclick="sendData()">Send</button>
+
+<h2>Results</h2>
+<table id="resultsTable">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Artist</th>
+            <th>Album</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Table rows will be added here -->
+    </tbody>
+</table>
+
+<script>
+// Function to load data from the API and display it in the table
+function loadData() {
+  $.ajax({
+    url: 'http://localhost:5000/build',
+    method: 'GET',
+    success: function(data) {
+      var tableContent = '';
+      $.each(data, function(key, value) {
+        tableContent += '<tr><td>' + key + '</td><td>' + value + '</td></tr>';
+      });
+      $('#dataTable tbody').html(tableContent);
+    },
+    error: function() {
+      alert('Error retrieving data');
+    }
+  });
+}
+
+// Function to send data from the text box to the API
+function sendData() {
+  var userInput = $('#userInput').val();
+  $.ajax({
+    url: 'http://localhost:5000/query',
+    method: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify({ query: userInput }),
+    success: function(response) {
+            // Clear previous results
+            $('#resultsTable tbody').empty();
+
+            // Assuming response is an array of objects
+            response.forEach(function(item) {
+              console.log(item);
+                // Append each row to the table
+                $('#resultsTable tbody').append(
+                    '<tr>' +
+                    '<td>' + item[0] + '</td>' +
+                    '<td>' + item[1] + '</td>' +
+                    '<td>' + item[2] + '</td>' +
+                    '</tr>'
+                );
+            });
+        },
+        error: function() {
+            alert('Error sending data');
+        }
+  });
+}
+
+// Load data when the page loads
+$(document).ready(function() {
+  loadData();
+});
+</script>
+
+</body>
+</html>
