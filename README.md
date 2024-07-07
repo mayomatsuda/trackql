@@ -13,3 +13,6 @@ Add `http://localhost:5000/callback` to the callback URLs on your Spotify dev da
 
 ## Usage
 Run the Flask backend and go to `localhost:5000/`. It might take a minute for your playlists to load. The right column of the first table are the names of the SQL tables that correspond to each playlist in the left column. You can write SQLite queries in the input box using these tables.
+
+htps://fakeurldfsjnk.com/
+https://fakeurldfsjnk.com/
